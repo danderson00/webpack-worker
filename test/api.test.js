@@ -29,11 +29,17 @@ test("promise rejections are flowed", () =>
 )
 
 test("emit from api call can be subscribed to", () => {
-  var operation = api.emit()
   var emits = []
-  operation.subscribe(data => emits.push(data))
-  return operation.then(result => {
-    expect(emits).toEqual(['stage 1', { stage: 2 }])
-    expect(result).toBe('complete')
-  })
+  return api.emit()
+    .subscribe(data => emits.push(data))
+    .then(result => {
+      expect(emits).toEqual(['stage 1', { stage: 2 }])
+      expect(result).toBe('complete')
+    })
 })
+
+// tiny-worker probably doesn't support transfer!
+// test("ArrayBuffer objects can be passed as parameters", () => 
+//   api.buffer(new ArrayBuffer(8))
+//     .then(length => expect(length).toBe(true))
+// )

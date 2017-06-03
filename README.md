@@ -39,10 +39,10 @@ To execute the process and monitor for any emitted events:
 var client = require('webpack-worker/client')
 var worker = new Worker('process.bundle.js')
 var process = client(worker, { query: 'my query' })
-process.subscribe(message => console.log(message))
-process.then(processedData => {
-  // ... do stuff with your data!
-})
+  .subscribe(message => console.log(message))
+  .then(processedData => {
+    // ... do stuff with your data!
+  })
 ```
 
 Once the promise returned from the worker process resolves, the worker will terminate.

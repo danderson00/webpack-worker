@@ -3,6 +3,7 @@ require('../../api')(baseValue => ({
   power: value => sleep(10, Math.pow(baseValue, value)),
   error: () => { throw new Error('test') },
   reject: () => Promise.reject({ code: 'test' }),
+  buffer: buffer => buffer.constructor.name,
   emit: (param, emit) => 
     sleep(10)
       .then(() => emit('stage 1'))

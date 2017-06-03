@@ -27,11 +27,11 @@ test("promise rejections are flowed", () =>
 )
 
 test("emit from process can be subscribed to", () => {
-  var process = client(worker('emit'))
   var emits = []
-  process.subscribe(data => emits.push(data))
-  return process.then(result => {
-    expect(emits).toEqual(['stage 1', { stage: 2 }])
-    expect(result).toBe('complete')
-  })
+  return client(worker('emit'))
+    .subscribe(data => emits.push(data))
+    .then(result => {
+      expect(emits).toEqual(['stage 1', { stage: 2 }])
+      expect(result).toBe('complete')
+    })
 })

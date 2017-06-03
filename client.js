@@ -18,10 +18,6 @@ module.exports = (worker, param) => {
               api[operation] = param => execute(nextId(), { type: 'invoke', param, operation })
               return api
             }, {}), { terminate: () => worker.terminate() }) 
-            // {
-            //   invoke: (operation, param) => execute(nextId(), { type: 'invoke', param, operation }),
-            //   terminate: () => worker.terminate()
-            // }
           default:
             throw new Error('Unrecognized response from worker')
         }
@@ -30,7 +26,7 @@ module.exports = (worker, param) => {
 
   function execute(id, payload) {
     return attachSubscribeFunction(id, new Promise((resolve, reject) => {
-      worker.postMessage(Object.assign({ id: id }, payload))
+      worker.postMessage(Object.assign({ id: id }, payload), extractArrayBuffers(payload.param))
       operations[id] = {
         listeners: [],
         messageHandler: response => {
@@ -53,7 +49,22 @@ module.exports = (worker, param) => {
   function attachSubscribeFunction(id, target) {
     target.subscribe = function(callback) {
       operations[id].listeners.push(callback)
+      return target
     }
     return target
+  }
+
+  function extractArrayBuffers(param) {
+    if(!param)
+      return
+
+    if(param.constructor === ArrayBuffer)
+      return [param]
+
+    return Object.keys(param).reduce((buffers, property) => {
+      if(param[property] && param[property].constructor === ArrayBuffer) 
+        buffers.push(param[property])
+      return buffers
+    }, [])
   }
 }
