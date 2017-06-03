@@ -3,13 +3,14 @@
 module.exports = worker => {
   onmessage = e => {
     const emit = data => self.postMessage(Object.assign({ id: e.data.id }, data))
+    const userEmit = user => emit({ user })
     const wrapError = error => (error && error.constructor === Error) ? { message: error.message, stack: error.stack } : error
     const emitError = error => emit({ error: wrapError(error) })
 
     try {
       switch(e.data.type) {
         case 'init':
-          Promise.resolve(worker(e.data.param, emit))
+          Promise.resolve(worker(e.data.param, userEmit))
             .then(result => {
               emit({ result: { type: 'process', result: result } })
               close()

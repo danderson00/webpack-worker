@@ -27,3 +27,13 @@ test("promise rejections are flowed", () =>
     .then(() => { throw new Error('Promise rejection did not flow') })
     .catch(error => expect(error).toEqual({ code: 'test' }))
 )
+
+test("emit from api call can be subscribed to", () => {
+  var operation = api.invoke('emit')
+  var emits = []
+  operation.subscribe(data => emits.push(data))
+  return operation.then(result => {
+    expect(emits).toEqual(['stage 1', { stage: 2 }])
+    expect(result).toBe('complete')
+  })
+})

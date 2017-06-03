@@ -25,3 +25,13 @@ test("promise rejections are flowed", () =>
     .then(() => { throw new Error('Promise rejection did not flow') })
     .catch(error => expect(error).toEqual({ code: 'test' }))
 )
+
+test("emit from process can be subscribed to", () => {
+  var process = client(worker('emit'))
+  var emits = []
+  process.subscribe(data => emits.push(data))
+  return process.then(result => {
+    expect(emits).toEqual(['stage 1', { stage: 2 }])
+    expect(result).toBe('complete')
+  })
+})
