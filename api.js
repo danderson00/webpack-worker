@@ -17,7 +17,10 @@ module.exports = worker => {
               operations = result
               emit({ result: { type: 'api' } })
             })
-            .catch(emitError)
+            .catch(error => {
+              emitError(error)
+              close()
+            })
           break;
 
         case 'invoke':
@@ -34,6 +37,7 @@ module.exports = worker => {
       }
     } catch(error) {
       emitError(error)
+      close()
     }
   }
 }
