@@ -1,0 +1,1 @@
+require('../../process')(value => value * 2)

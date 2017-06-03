@@ -1,0 +1,18 @@
+{
+  "name": "simple-worker",
+  "version": "1.0.0",
+  "description": "Simple request/response and event emit style web workers",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "blob-util": "^1.2.1",
+    "jest": "^20.0.4",
+    "tiny-worker": "^2.1.1",
+    "webpack": "^2.6.1"
+  }
+}
