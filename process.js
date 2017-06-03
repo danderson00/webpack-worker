@@ -3,9 +3,11 @@
 module.exports = worker => {
   onmessage = e => {
     const emit = data => self.postMessage(Object.assign({ id: e.data.id }, data))
-    const userEmit = user => emit({ user })
     const wrapError = error => (error && error.constructor === Error) ? { message: error.message, stack: error.stack } : error
     const emitError = error => emit({ error: wrapError(error) })
+
+    let userEmit = user => emit({ user })
+    userEmit.delayed = user => valueToChain => emit({ user }) || valueToChain
 
     try {
       switch(e.data.type) {
