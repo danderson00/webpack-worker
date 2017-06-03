@@ -1,13 +1,12 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
+var common = require('./worker.common')
+
 module.exports = worker => {
   onmessage = e => {
     const emit = data => self.postMessage(Object.assign({ id: e.data.id }, data))
-    const wrapError = error => (error && error.constructor === Error) ? { message: error.message, stack: error.stack } : error
-    const emitError = error => emit({ error: wrapError(error) })
-
-    let userEmit = user => emit({ user })
-    userEmit.delayed = user => valueToChain => Promise.resolve(emit({ user }) || valueToChain)
+    const emitError = common.emitError(emit)
+    const userEmit = common.userEmit(emit)
 
     try {
       switch(e.data.type) {
