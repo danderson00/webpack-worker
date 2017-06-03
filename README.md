@@ -33,11 +33,11 @@ process((params, emit) => {
 ```
 
 This file will be run through webpack as an entry point (more on this later).
-To execute the process:
+To execute the process and monitor for any emitted events:
 
 ```Javascript
 var client = require('webpack-worker/client')
-var process = createClient(new Worker('process.bundle.js'), { query: 'my query' })
+var process = client(new Worker('process.bundle.js'), { query: 'my query' })
 process.subscribe(message => console.log(message))
 process.then(processedData => {
   // ... do stuff with your data!
@@ -69,10 +69,11 @@ To call our API:
 
 ```Javascript
 var client = require('webpack-worker/client')
-var api = createClient(new Worker('api.bundle.js'), 123)
+var worker = new Worker('api.bundle.js')
+var api = client(worker, 123)
   .then(api => {
-    api.invoke('multiply', 32).then(result => console.log(result /* 4224 */))
-    api.invoke('bigCalculation', { data: { a: 1 } }).then()
+    api.multiply(32).then(result => console.log(result /* 4224 */))
+    api.bigCalculation({ data: { a: 1 } }).then(result => /* do stuff with result */)
   })
 ```
 

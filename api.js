@@ -15,7 +15,7 @@ module.exports = worker => {
           Promise.resolve(worker(e.data.param, userEmit))
             .then(result => {
               operations = result
-              emit({ result: { type: 'api' } })
+              emit({ result: { type: 'api', operations: Object.keys(result) } })
             })
             .catch(error => {
               emitError(error)

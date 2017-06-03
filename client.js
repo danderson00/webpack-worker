@@ -14,10 +14,14 @@ module.exports = (worker, param) => {
           case 'process':
             return result.result
           case 'api':
-            return {
-              invoke: (operation, param) => execute(nextId(), { type: 'invoke', param, operation }),
-              terminate: () => worker.terminate()
-            }
+            return Object.assign(result.operations.reduce((api, operation) => {
+              api[operation] = param => execute(nextId(), { type: 'invoke', param, operation })
+              return api
+            }, {}), { terminate: () => worker.terminate() }) 
+            // {
+            //   invoke: (operation, param) => execute(nextId(), { type: 'invoke', param, operation }),
+            //   terminate: () => worker.terminate()
+            // }
         }
       })
   )
