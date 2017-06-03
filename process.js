@@ -7,7 +7,7 @@ module.exports = worker => {
     const emitError = error => emit({ error: wrapError(error) })
 
     let userEmit = user => emit({ user })
-    userEmit.delayed = user => valueToChain => emit({ user }) || valueToChain
+    userEmit.delayed = user => valueToChain => Promise.resolve(emit({ user }) || valueToChain)
 
     try {
       switch(e.data.type) {
