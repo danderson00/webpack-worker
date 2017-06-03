@@ -10,7 +10,7 @@ module.exports = (worker, param) => {
   return attachSubscribeFunction(initId,
     execute(initId, { type: 'init', param: param })
       .then(result => {
-        switch(result.type) {
+        switch(result && result.type) {
           case 'process':
             return result.result
           case 'api':
@@ -22,6 +22,8 @@ module.exports = (worker, param) => {
             //   invoke: (operation, param) => execute(nextId(), { type: 'invoke', param, operation }),
             //   terminate: () => worker.terminate()
             // }
+          default:
+            throw new Error('Unrecognized response from worker')
         }
       })
   )
