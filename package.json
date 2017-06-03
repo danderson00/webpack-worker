@@ -1,13 +1,13 @@
 {
-  "name": "simple-worker",
-  "version": "1.0.0",
+  "name": "webpack-worker",
+  "version": "0.0.1",
   "description": "Simple request/response and event emit style web workers",
-  "main": "index.js",
   "scripts": {
     "test": "jest"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["worker", "webworker", "webpack", "promise"],
+  "author": "danderson00@gmail.com",
+  "repository": "https://github.com/danderson00/webpack-worker",
   "license": "MIT",
   "devDependencies": {
     "blob-util": "^1.2.1",
