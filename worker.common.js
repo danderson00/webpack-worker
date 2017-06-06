@@ -9,5 +9,5 @@ var common = module.exports = {
 }
 
 function isError(target) {
-  return !!(target && (target.constructor === Error || (['error', 'exception'].some(word => constructor.prototype.constructor.name.toLowerCase().includes(word)))))
+  return !!(target && (target.constructor === Error || (['error', 'exception'].some(word => target.constructor.prototype.constructor.name.toLowerCase().includes(word)))))
 }
