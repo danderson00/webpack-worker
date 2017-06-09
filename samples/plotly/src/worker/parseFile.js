@@ -5,9 +5,9 @@ const parseDate = value => new Date(+value.substr(0, 4), +value.substr(4, 2), +v
 const sortGroups = (a, b) => a.key - b.key
 
 export default function(text) {
-  return text.split('\n').groupBy(parseDate, 
+  return text.trim().split('\n').groupBy(parseDate, 
     line => {
-      var values = day.split(',')
+      var values = line.split(',')
       return {
         stock: values[1],
         start: +values[2],

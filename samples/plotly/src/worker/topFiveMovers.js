@@ -1,22 +1,33 @@
 export default function (data, filter) {
-  var filtered = data.findRange(filter.start, filter.end, x => x.key)
+  var filtered = data.findRange(filter.min, filter.max, x => x.key)
 
-  // this is a rather naive solution that assumes all stocks have a record on the first day
-  return Object.keys(filtered[0]).map(stock => ({
+  var stocks = filtered.reduce((aggregate, day) => {
+    Object.keys(day.value).forEach(stock => {
+      var existing = aggregate[stock] || {}
+      var today = day.value[stock]
+
+      aggregate[stock] = {
+        stock: stock,
+        start: existing.start || today.start,
+        end: today.end,
+        high: existing.high > today.high ? existing.high : today.high,
+        low: existing.low < today.low ? existing.low : today.low
+      }
+    })
+    return aggregate
+  }, {})
+
+  var topMovers = Object.keys(stocks)
+    .map(stock => ({
       stock: stock,
-      start: filtered[0][stock].start,
-      end: filtered[filtered.length - 1][stock].end
+      gain: (stocks[stock].end - stocks[stock].start) / stocks[stock].start
     }))
-    .map(stock => ({ ...stock, gain: (stock.end - stock.start) / stock.start }))
     .sort((a, b) => b.gain - a.gain)
-    .slice(0, 5)
-
-  // var stocks = filtered.reduce((aggregate, day) => {
-  //   Object.keys(day).forEach(stock => aggregate[stock] = {
-  //     stock: stock,
-  //     high: 
-  //     low:
-  //   })
-  //   return stocks
-  // }, {})
+    .slice(0, 10)
+  
+  return {
+    x: topMovers.map(x => x.stock),
+    y: topMovers.map(x => x.gain),
+    type: 'bar'
+  }
 }
