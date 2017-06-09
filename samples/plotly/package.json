@@ -1,0 +1,22 @@
+{
+  "name": "plotly",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "aggregate-array-extensions": "0.0.5",
+    "plotly.js": "^1.27.1",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-input-range": "^1.1.4",
+    "webpack-worker": "0.0.9"
+  },
+  "devDependencies": {
+    "react-scripts": "1.0.7"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
