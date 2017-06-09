@@ -57,6 +57,20 @@ test("rejecting promise executes next operation", done => {
   })
 })
 
+test("applyTo applies throttle function to all functions on an object", () => {
+  var result = throttle.applyTo({
+    a: () => {},
+    b: () => {},
+    c: 'test',
+    d: undefined
+  })
+
+  expect(result.a.name).toBe('injected')
+  expect(result.b.name).toBe('injected')
+  expect(result.c).toBe('test')
+  expect(result.d).toBe(undefined)
+})
+
 function generateOperation() {
   let result = { operations: [] }
   result.operation = throttle(function() {

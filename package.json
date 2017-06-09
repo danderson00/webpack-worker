@@ -1,9 +1,12 @@
 {
   "name": "webpack-worker",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Simple request/response and event emit style web workers",
   "scripts": {
     "test": "jest"
+  },
+  "jest": {
+    "testRegex": "(/test/.*test.js)"
   },
   "keywords": ["worker", "webworker", "webpack", "promise"],
   "author": "danderson00@gmail.com",

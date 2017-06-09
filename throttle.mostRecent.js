@@ -15,7 +15,7 @@ module.exports = function throttle(func) {
     }
   }
 
-  return function() {
+  return function injected() {
     var args = Array.from(arguments)
     var result = new Promise((resolve, reject) => {
       if(next)
@@ -35,4 +35,11 @@ module.exports = function throttle(func) {
     })
     return result;
   }
+}
+
+module.exports.applyTo = function (target) {
+  return Object.keys(target).reduce((result, property) => {
+    result[property] = typeof target[property] === 'function' ? module.exports(target[property]) : target[property]
+    return result
+  }, {})
 }
