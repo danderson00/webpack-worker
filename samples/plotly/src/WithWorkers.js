@@ -5,10 +5,11 @@ import throttle from 'webpack-worker/throttle.mostRecent'
 import Plotly from 'plotly.js/dist/plotly-basic.js'
 
 export default class WithWorkers extends Component {
+  // we are just hard coding this range for simplicity
   state = {
     filter: {
       min: new Date(2009, 7, 21).getTime(),
-      max: new Date(2010, 7, 21).getTime()
+      max: new Date(2014, 7, 21).getTime()
     }
   }
 
@@ -25,9 +26,7 @@ export default class WithWorkers extends Component {
   renderGraph = filter => {
     this.setState({ filter })
     this.worker.topFiveMovers(filter)
-      .then(data => {
-        Plotly.newPlot(this.element, [data])
-      })
+      .then(data => Plotly.newPlot(this.element, [data]))
       .catch(error => error.dropped || console.error(error))
   }
 
@@ -36,7 +35,7 @@ export default class WithWorkers extends Component {
       <div className="filter">
         <InputRange  
           minValue={new Date(2009, 7, 21).getTime()}
-          maxValue={new Date(2010, 7, 21).getTime()}
+          maxValue={new Date(2014, 7, 21).getTime()}
           value={this.state.filter}
           step={86400000}
           onChange={filter => this.renderGraph(filter)}

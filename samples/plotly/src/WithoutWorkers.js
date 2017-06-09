@@ -5,10 +5,11 @@ import parseFile from './worker/parseFile'
 import Plotly from 'plotly.js/dist/plotly-basic.js'
 
 export default class WithoutWorkers extends Component {
+  // we are just hard coding this range for simplicity
   state = {
     filter: {
       min: new Date(2009, 7, 21).getTime(),
-      max: new Date(2010, 7, 21).getTime()
+      max: new Date(2014, 7, 21).getTime()
     }
   }
 
@@ -31,7 +32,7 @@ export default class WithoutWorkers extends Component {
       <div className="filter">
         <InputRange  
           minValue={new Date(2009, 7, 21).getTime()}
-          maxValue={new Date(2010, 7, 21).getTime()}
+          maxValue={new Date(2014, 7, 21).getTime()}
           value={this.state.filter}
           step={86400000}
           onChange={filter => this.renderGraph(filter)}
