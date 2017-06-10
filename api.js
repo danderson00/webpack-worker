@@ -26,15 +26,15 @@ module.exports = function(worker) {
 
         case 'invoke':
           if(!operations[e.data.operation])
-            emitError(new Error(`Unknown operation: ${e.data.operation}`))
+            emitError(new Error('Unknown operation: ' + e.data.operation))
           
             Promise.resolve(operations[e.data.operation](e.data.param, userEmit))
-              .then(function(result) { emit({ result }) })
+              .then(function(result) { emit({ result: result }) })
               .catch(emitError)
           break;
 
         default:
-          emitError(new Error(`Unknown internal operation: ${e.data.type}`))
+          emitError(new Error('Unknown internal operation: ' + e.data.type))
       }
     } catch(error) {
       emitError(error)

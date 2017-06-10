@@ -13,12 +13,21 @@ var common = module.exports = {
     }
   },
   userEmit: function(emit) {
-    userEmit = user => emit({ user })
-    userEmit.delayed = user => valueToChain => emit({ user }) || valueToChain
+    userEmit = function(userData) { 
+      emit({ user: userData })
+    }
+    userEmit.delayed = function(userData) { 
+      return function(valueToChain) { 
+        emit({ user: userData }) 
+        return valueToChain
+      }
+    }
     return userEmit
   }
 }
 
 function isError(target) {
-  return !!(target && (target.constructor === Error || ['error', 'exception'].some(word => target.constructor.prototype.constructor.name.toLowerCase().includes(word))))
+  return !!(target && (target.constructor === Error || ['error', 'exception'].some(function(word) { 
+    return target.constructor.prototype.constructor.name.toLowerCase().includes(word) 
+  })))
 }

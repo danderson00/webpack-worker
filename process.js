@@ -23,11 +23,11 @@ module.exports = function(worker) {
           break;
 
         case 'invoke':
-          emitError(new Error(`Invoke not allowed with process workers`))
+          emitError(new Error('Invoke not allowed with process workers'))
           break;
 
         default:
-          emitError(new Error(`Unknown internal operation: ${e.data.type}`))
+          emitError(new Error('Unknown internal operation: ' + e.data.type))
       }
     } catch(error) {
       emitError(error)
