@@ -22,7 +22,7 @@ module.exports = function(worker, param) {
           case 'api':
             return Object.assign(result.operations.reduce(function(api, operation) {
               api[operation] = function(param) {
-                return execute(nextId(), { type: 'invoke', param, operation })
+                return execute(nextId(), { type: 'invoke', param: param, operation: operation })
               }
               return api
             }, {}), { 
