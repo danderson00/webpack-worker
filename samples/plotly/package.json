@@ -8,7 +8,7 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-input-range": "^1.1.4",
-    "webpack-worker": "0.0.10"
+    "webpack-worker": "0.0.11"
   },
   "devDependencies": {
     "autoprefixer": "6.7.2",

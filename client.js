@@ -1,9 +1,9 @@
 module.exports = function(worker, param) {
-  var nextId = (function(id = 0) {
+  var nextId = (function(id) {
     return function() { 
       return ++id
     }
-  })()
+  })(0)
 
   var operations = {}
 
