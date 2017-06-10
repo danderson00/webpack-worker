@@ -101,7 +101,7 @@ For a simple solution to our UI needs, we'll use the `react-input-range` NPM pac
 // ...
 import InputRange from 'react-input-range'
 
-export default class WithWorkers extends Component {
+export default class Graph extends Component {
   // set the default filter value - we are hard coding this range for simplicity
   state = {
     filter: {
