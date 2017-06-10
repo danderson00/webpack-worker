@@ -1,6 +1,6 @@
 import api from 'webpack-worker/api'
 import parseFile from './parseFile'
-import topTenMovers from './topFiveMovers'
+import topTenMovers from './topTenMovers'
 import 'aggregate-array-extensions'
 
 // we can perform initialization by returning a promise here

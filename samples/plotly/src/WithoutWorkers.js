@@ -29,6 +29,7 @@ export default class WithoutWorkers extends Component {
 
   render = () => (
     <div>
+      <h3>Without WebWorkers</h3>
       <div className="filter">
         <InputRange  
           minValue={new Date(2009, 7, 21).getTime()}
