@@ -10,13 +10,13 @@ The use case discussed here is purely to demonstrate the impact of using WebWork
 
 ## Setting the Scene
 
-To demonstrate, we're going to build a graph that shows the top 10 movers from some historical stock market data available at http://pages.swcp.com/stocks/. The data consists of a year of stock prices for 242 stocks in CSV format, one line per stock, per day. For example:
+To demonstrate, we're going to build a graph that shows the top 10 movers from some historical stock market data available at http://pages.swcp.com/stocks/. We're also going to add a date range slider to dynamically pick the date range to analyze. 
+
+The data consists of a year of stock prices for 242 stocks in CSV format, one line per stock, per day. For example:
 
     20090916,AMZN,85.97,90.98,85.9,90.7,131142
 
-That's the date, stock, opening, high, low, closing and... I dunno.
-
-We're also going to add a date range slider to dynamically pick the date range to analyze. 
+That's the date, stock symbol, opening, high, low, and closing prices, and... I dunno.
 
 There is a bunch of work for the app to do to convert this style data into the format we need, particularly when working over many years worth of data. The details of the implementation aren't relevant to this post, but the complete sample is available in the [github repository](https://github.com/danderson00/webpack-worker/tree/master/samples/plotly).
 
