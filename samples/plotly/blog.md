@@ -1,6 +1,6 @@
 # Parallelizing Javascript Workloads - Building High Performance Graphs with Plotly and webpack-worker
 
-Recently, we've been playing around with plotting various graphs in a react application with Plotly. It became clear pretty quickly that working with large data sets on the main application thread is simply not an option. Even with a 50ms workload, dragging a date range slider is jarring, not the smooth experience we're after.
+Recently, we've been playing around with plotting various graphs in a react application with Plotly. It became clear pretty quickly that working with large data sets on the main application thread is simply not an option. Dragging a date range slider to filter graphs is jarring, not the smooth experience we're after.
 
 Enter WebWorkers. 
 
