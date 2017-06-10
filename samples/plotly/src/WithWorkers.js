@@ -25,7 +25,7 @@ export default class WithWorkers extends Component {
 
   renderGraph = filter => {
     this.setState({ filter })
-    this.worker.topFiveMovers(filter)
+    this.worker.topTenMovers(filter)
       .then(data => Plotly.newPlot(this.element, [data]))
       .catch(error => error.dropped || console.error(error))
   }

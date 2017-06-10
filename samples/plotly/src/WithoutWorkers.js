@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import InputRange from 'react-input-range'
-import topFiveMovers from './worker/topFiveMovers'
+import topTenMovers from './worker/topTenMovers'
 import parseFile from './worker/parseFile'
 import Plotly from 'plotly.js/dist/plotly-basic.js'
 
@@ -24,7 +24,7 @@ export default class WithoutWorkers extends Component {
 
   renderGraph = filter => {
     this.setState({ filter })
-    Plotly.newPlot(this.element, [topFiveMovers(this.data, filter)])
+    Plotly.newPlot(this.element, [topTenMovers(this.data, filter)])
   }
 
   render = () => (

@@ -1,6 +1,8 @@
 export default function (data, filter) {
+  // filter our data the the selected date range
   var filtered = data.findRange(filter.min, filter.max, x => x.key)
 
+  // aggregate the data for each stock
   var stocks = filtered.reduce((aggregate, day) => {
     Object.keys(day.value).forEach(stock => {
       var existing = aggregate[stock] || {}
@@ -17,6 +19,7 @@ export default function (data, filter) {
     return aggregate
   }, {})
 
+  // find our top ten movers
   var topMovers = Object.keys(stocks)
     .map(stock => ({
       stock: stock,
@@ -25,6 +28,7 @@ export default function (data, filter) {
     .sort((a, b) => b.gain - a.gain)
     .slice(0, 10)
   
+  // map into vectors that Plotly understands
   return {
     x: topMovers.map(x => x.stock),
     y: topMovers.map(x => x.gain),
