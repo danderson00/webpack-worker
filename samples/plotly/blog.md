@@ -182,6 +182,6 @@ If your app was created with `create-react-app`, there are a couple of additiona
 
 ## Wrapping Up
 
-You can see a working example of what we've discussed here contrasted with running everything on the main UI thread [here]().
+You can see a working example of what we've discussed here contrasted with running everything on the main UI thread [here](https://danderson00.github.io/webpack-worker/).
 
-The full source to this sample is available in the `webpack-worker` repository [here](https://github.com/danderson00/webpack-worker).
+The full source to this sample is available in the `webpack-worker` repository [here](https://github.com/danderson00/webpack-worker/samples/plotly).

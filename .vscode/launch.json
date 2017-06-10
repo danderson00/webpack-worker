@@ -10,6 +10,13 @@
       "name": "Run Tests",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest",
       "args": ["--runInBand"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Plotly Sample",
+      "program": "${workspaceRoot}/samples/plotly/scripts/start",
+      "cwd":"${workspaceRoot}/samples/plotly"
     }
   ]
 }
