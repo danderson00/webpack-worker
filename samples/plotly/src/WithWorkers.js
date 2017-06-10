@@ -15,8 +15,8 @@ export default class WithWorkers extends Component {
 
   componentDidMount = () => {
     createClient(
-      new Worker('/static/js/worker.bundle.js'), 
-      '/sp500hst.txt'
+      new Worker('static/js/worker.bundle.js'), 
+      window.location.pathname + 'sp500hst.txt'
     ).then(client => {
       this.worker = throttle.applyTo(client)
       this.renderGraph(this.state.filter)

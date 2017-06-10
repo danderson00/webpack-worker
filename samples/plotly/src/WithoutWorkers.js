@@ -14,7 +14,7 @@ export default class WithoutWorkers extends Component {
   }
 
   componentDidMount = () => {
-    fetch('/sp500hst.txt')
+    fetch('sp500hst.txt')
       .then(response => response.text())
       .then(text => {
         this.data = parseFile(text)
