@@ -181,7 +181,7 @@ module.exports = {
 }
 ```
 
-If your app was created with `create-react-app`, there are a couple of additional steps that are described [here](https://github.com/danderson00/webpack-worker).
+If your app was created with `create-react-app`, there are a couple of additional steps that are described [here](https://github.com/danderson00/webpack-worker#configuring-a-create-react-app-application).
 
 ## Wrapping Up
 
