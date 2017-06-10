@@ -128,7 +128,7 @@ export default class Graph extends Component {
 
 This ends up looking something like:
 
-![alt text](https://danderson00.github.io/webpack-worker/resources/graph with filter.png "rendered graph with date range slider")
+![alt text](https://danderson00.github.io/webpack-worker/resources/graph%20with%20filter.png "rendered graph with date range slider")
 
 Things are starting to look pretty good! Now, as we drag the date slider, the graph updates. There's a problem, though. As we drag the slider, it queues up a filter for every move event onto our worker, which tirelessly attempts to fulfil all of our requests... long after we've finished dragging the slider.
 
