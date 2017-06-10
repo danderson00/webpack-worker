@@ -16,7 +16,7 @@ The data consists of a year of stock prices for 242 stocks in CSV format, one li
 
     20090916,AMZN,85.97,90.98,85.9,90.7,131142
 
-That's the date, stock symbol, opening, high, low, and closing prices, and... I dunno.
+That's the date, stock symbol, opening, high, low, and closing prices, and... I dunno. We're going to duplicate the data so we effectively have 5 years worth of data. We're not here to analyze stocks, are we?
 
 There is a bunch of work for the app to do to convert this style data into the format we need, particularly when working over many years worth of data. The details of the implementation aren't relevant to this post, but the complete sample is available in the [github repository](https://github.com/danderson00/webpack-worker/tree/master/samples/plotly).
 
