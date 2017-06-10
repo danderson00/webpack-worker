@@ -1,7 +1,18 @@
 var common = module.exports = { 
-  wrapError: error => isError(error) ? { message: error.message, stack: error.stack } : error,
-  emitError: emit => error => emit({ error: common.wrapError(error) }),
-  userEmit: emit => {
+  emit: function(id) {
+    return function(data) {
+      self.postMessage(Object.assign({ id: id }, data))
+    }
+  },
+  wrapError: function(error) {
+    return isError(error) ? { message: error.message, stack: error.stack } : error
+  },
+  emitError: function(emit) {
+    return function(error) {
+      emit({ error: common.wrapError(error) })
+    }
+  },
+  userEmit: function(emit) {
     userEmit = user => emit({ user })
     userEmit.delayed = user => valueToChain => emit({ user }) || valueToChain
     return userEmit

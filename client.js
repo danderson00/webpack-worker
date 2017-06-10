@@ -1,23 +1,35 @@
-module.exports = (worker, param) => {
-  const nextId = ((id = 0) => () => ++id)()
+module.exports = function(worker, param) {
+  var nextId = (function(id = 0) {
+    return function() { 
+      return ++id
+    }
+  })()
 
-  let operations = {}
+  var operations = {}
 
-  worker.onmessage = e => operations[e.data.id].messageHandler(e.data)
+  worker.onmessage = function(e) {
+    operations[e.data.id].messageHandler(e.data)
+  }
 
-  let initId = nextId()
+  var initId = nextId()
 
   return attachSubscribeFunction(initId,
     execute(initId, { type: 'init', param: param })
-      .then(result => {
+      .then(function(result) {
         switch(result && result.type) {
           case 'process':
             return result.result
           case 'api':
-            return Object.assign(result.operations.reduce((api, operation) => {
-              api[operation] = param => execute(nextId(), { type: 'invoke', param, operation })
+            return Object.assign(result.operations.reduce(function(api, operation) {
+              api[operation] = function(param) {
+                return execute(nextId(), { type: 'invoke', param, operation })
+              }
               return api
-            }, {}), { terminate: () => worker.terminate() }) 
+            }, {}), { 
+              terminate: function() {
+                worker.terminate() 
+              }
+            }) 
           default:
             throw new Error('Unrecognized response from worker')
         }
@@ -25,14 +37,14 @@ module.exports = (worker, param) => {
   )
 
   function execute(id, payload) {
-    return attachSubscribeFunction(id, new Promise((resolve, reject) => {
+    return attachSubscribeFunction(id, new Promise(function(resolve, reject) {
       worker.postMessage(Object.assign({ id: id }, payload), extractArrayBuffers(payload.param))
       operations[id] = {
         listeners: [],
-        messageHandler: response => {
+        messageHandler: function(response) {
           // if the message has user content, we want to broadcast this to any registered listeners
           if(response.user) {
-            operations[id].listeners.forEach(listener => listener(response.user))
+            operations[id].listeners.forEach(function(listener) { listener(response.user) })
           } else {
             // otherwise, assume the operation completed and resolve or reject the promise accordingly
             delete operations[id]
@@ -61,7 +73,7 @@ module.exports = (worker, param) => {
     if(param.constructor === ArrayBuffer)
       return [param]
 
-    return Object.keys(param).reduce((buffers, property) => {
+    return Object.keys(param).reduce(function(buffers, property) {
       if(param[property] && param[property].constructor === ArrayBuffer) 
         buffers.push(param[property])
       return buffers

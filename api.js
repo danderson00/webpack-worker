@@ -2,23 +2,23 @@
 /* eslint-disable no-undef */
 var common = require('./worker.common')
 
-module.exports = worker => {
-  let operations
+module.exports = function(worker) {
+  var operations
 
-  onmessage = e => {
-    const emit = data => self.postMessage(Object.assign({ id: e.data.id }, data))
-    const emitError = common.emitError(emit)
-    const userEmit = common.userEmit(emit)
+  onmessage = function(e) {
+    var emit = common.emit(e.data.id)
+    var emitError = common.emitError(emit)
+    var userEmit = common.userEmit(emit)
 
     try {
       switch(e.data.type) {
         case 'init':
           Promise.resolve(worker(e.data.param, userEmit))
-            .then(result => {
+            .then(function(result) {
               operations = result
               emit({ result: { type: 'api', operations: Object.keys(result) } })
             })
-            .catch(error => {
+            .catch(function(error) {
               emitError(error)
               close()
             })
@@ -29,7 +29,7 @@ module.exports = worker => {
             emitError(new Error(`Unknown operation: ${e.data.operation}`))
           
             Promise.resolve(operations[e.data.operation](e.data.param, userEmit))
-              .then(result => emit({ result }))
+              .then(function(result) { emit({ result }) })
               .catch(emitError)
           break;
 
