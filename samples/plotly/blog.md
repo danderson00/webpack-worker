@@ -4,24 +4,21 @@ Recently, we've been playing around with plotting various graphs in a react appl
 
 Enter WebWorkers. 
 
-WebWorkers allow offloading CPU intensive tasks to other threads and are supported by pretty all modern web browsers. However, they are a very low level mechanism, exposing only a simple message passing API for communication. The `webpack-worker` package provides us with a much simpler and cleaner abstraction for everyday use.
+WebWorkers allow offloading CPU intensive tasks to other threads and are [supported by](http://caniuse.com/#search=webworker) pretty all modern web browsers. However, they are a very low level mechanism, exposing only a simple message passing API for communication. The `webpack-worker` package provides us with a much simpler and cleaner abstraction for everyday use.
 
 The use case discussed here is purely to demonstrate the impact of using WebWorkers - `webpack-worker` can be used for executing any Javascript code within a WebWorker, not just calculating graph data.
 
 ## Setting the Scene
 
-To demonstrate, we're going to build a graph that shows the top 10 movers from some historical stock market data available at http://pages.swcp.com/stocks/. The data consists of a year of stock prices for 242 stocks in CSV format, one line per stock, per day. Each line contains the stock's opening, closing, high and low prices for the day. We're going to add a date range slider to dynamically pick the date range to analyze. 
+To demonstrate, we're going to build a graph that shows the top 10 movers from some historical stock market data available at http://pages.swcp.com/stocks/. The data consists of a year of stock prices for 242 stocks in CSV format, one line per stock, per day. For example:
 
-A basic process for parsing the data into something Plotly can consume might look like:
+    20090916,AMZN,85.97,90.98,85.9,90.7,131142
 
-- Parse CSV into a array sorted by date containing an element for each day. Each element contains the data for each stock for the day
-- Filter the array to the selected date range
-- Aggregate each stock, calculating the opening and closing value, and the high and low values for the period
-- Calculate the relative gain, high and low values for each stock
-- Sort by the gain and take the top 10
-- Convert to vectors suitable for Plotly
+That's the date, stock, opening, high, low, closing and... I dunno.
 
-There is a bit of work for the app to do, particularly when working over many years worth of data. The details of the implementation aren't relevant to this post, but the complete sample is available in the github repository.
+We're also going to add a date range slider to dynamically pick the date range to analyze. 
+
+There is a bunch of work for the app to do to convert this style data into the format we need, particularly when working over many years worth of data. The details of the implementation aren't relevant to this post, but the complete sample is available in the [github repository](https://github.com/danderson00/webpack-worker/tree/master/samples/plotly).
 
 ## Defining Our Worker Code
 
@@ -48,7 +45,7 @@ api(url => {
           var topTen = findTopTen(stocks)
           return mapToVectors(topTen)
         },
-        // add other graph definitions here
+        // add other API functions here
       }
     })
   }
@@ -59,9 +56,9 @@ You'll notice that this module doesn't export anything. That's because WebWorker
 
 ## Consuming Our Worker
 
-`webpack-worker` generates a client API for us, based off the API we specify in the worker. Note that currently only a single argument can be provided, both for initialization and API calls. Passing objects and using [ES6 rest / spread and object destructuring](http://www.datchley.name/es6-rest-spread-defaults-and-destructuring/) is best practice here as it makes adding and removing parameters in future much simpler.
+`webpack-worker` generates a client API for us, based off the API we specify in the worker. Note that currently only a single argument can be provided to API calls and initialization.
 
-Let's take a look at how our graph component might look without filters. We'll add these next.
+Let's take a look at how our graph component might look without filters. We'll add those next.
 
 ```Javascript
 import React, { Component } from 'react'
@@ -73,7 +70,6 @@ export default class Graph extends Component {
     // create a client for our worker API, passing in the URL
     // the promise resolves once initialization has finished
     createClient(new Worker('/static/js/worker.bundle.js'), '/sp500hst.txt')
-      // call our topTenMovers API function
       .then(worker => {
         this.worker = worker
         this.renderGraph()
@@ -82,6 +78,7 @@ export default class Graph extends Component {
 
   renderGraph = (filter = {}) => {
     this.setState({ filter })
+    // call our topTenMovers API function
     this.worker.topTenMovers(filter)
       .then(data => Plotly.newPlot(this.element, [data]))
   }
@@ -91,7 +88,9 @@ export default class Graph extends Component {
 }
 ```
 
-Pretty simple stuff. You'll notice we kept graph rendering logic separate in the `renderGraph` function. We'll reuse this when we add a date filter.
+Pretty simple stuff. You'll notice we kept graph rendering logic separate in the `renderGraph` function. We'll reuse this when we add a date filter. This ends up looking something like:
+
+![alt text](https://danderson00.github.io/webpack-worker/resources/graph.png "rendered graph")
 
 ## Dynamically Filtering
 
@@ -126,6 +125,10 @@ export default class Graph extends Component {
   )
 }
 ```
+
+This ends up looking something like:
+
+![alt text](https://danderson00.github.io/webpack-worker/resources/graph with filter.png "rendered graph with date range slider")
 
 Things are starting to look pretty good! Now, as we drag the date slider, the graph updates. There's a problem, though. As we drag the slider, it queues up a filter for every move event onto our worker, which tirelessly attempts to fulfil all of our requests... long after we've finished dragging the slider.
 
