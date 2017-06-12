@@ -4,12 +4,12 @@ export default function (data, filter) {
 
   // aggregate the data for each stock
   var stocks = filtered.reduce((aggregate, day) => {
-    Object.keys(day.value).forEach(stock => {
-      var existing = aggregate[stock] || {}
-      var today = day.value[stock]
+    Object.keys(day.value).forEach(symbol => {
+      var existing = aggregate[symbol] || {}
+      var today = day.value[symbol]
 
-      aggregate[stock] = {
-        stock: stock,
+      aggregate[symbol] = {
+        stock: symbol,
         start: existing.start || today.start,
         end: today.end,
         high: existing.high > today.high ? existing.high : today.high,
@@ -21,17 +21,37 @@ export default function (data, filter) {
 
   // find our top ten movers
   var topMovers = Object.keys(stocks)
-    .map(stock => ({
-      stock: stock,
-      gain: (stocks[stock].end - stocks[stock].start) / stocks[stock].start
-    }))
+    .map(symbol => {
+      var stock = stocks[symbol]
+      return {
+        stock: symbol,
+        gain: (stock.end - stock.start) / stock.start * 100,
+        relativeHigh: (stock.high - stock.start) / stock.start * 100,
+        relativeLow: (stock.low - stock.start) / stock.start * 100
+      }
+    })
     .sort((a, b) => b.gain - a.gain)
     .slice(0, 10)
   
   // map into vectors that Plotly understands
-  return {
-    x: topMovers.map(x => x.stock),
-    y: topMovers.map(x => x.gain),
-    type: 'bar'
-  }
+  return [
+    {
+      x: topMovers.map(x => x.stock),
+      y: topMovers.map(x => x.relativeLow),
+      name: 'Low',
+      type: 'bar'
+    },
+    {
+      x: topMovers.map(x => x.stock),
+      y: topMovers.map(x => x.gain),
+      name: 'Gain',
+      type: 'bar'
+    },
+    {
+      x: topMovers.map(x => x.stock),
+      y: topMovers.map(x => x.relativeHigh),
+      name: 'High',
+      type: 'bar'
+    }
+  ]
 }

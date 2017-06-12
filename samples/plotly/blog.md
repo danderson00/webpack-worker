@@ -52,7 +52,7 @@ api(url => {
 )
 ```
 
-You'll notice that this module doesn't export anything. That's because WebWorkers run in an isolated thread - this module is the entry point for the WebWorker. We'll talk about how to use webpack to create a bundle for this a little bit later.
+You'll notice that this module doesn't export anything. That's because WebWorkers run in an isolated thread - this module is the entry point for the WebWorker. `webpack-worker` handles the low level communication for you. We'll talk about how to use webpack to create a bundle for this a little bit later.
 
 ## Consuming Our Worker
 
@@ -185,6 +185,6 @@ If your app was created with `create-react-app`, there are a couple of additiona
 
 ## Wrapping Up
 
-You can see a working example of what we've discussed here contrasted with running everything on the main UI thread [here](https://danderson00.github.io/webpack-worker/).
+You can see a working example of what we've discussed here contrasted with running everything on the main UI thread [here](https://danderson00.github.io/webpack-worker/). It's worth noting that `webpack-worker` will work with other bundling systems like browserify.
 
 The full source to this sample is available in the `webpack-worker` repository [here](https://github.com/danderson00/webpack-worker/samples/plotly).

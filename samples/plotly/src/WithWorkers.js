@@ -4,6 +4,13 @@ import createClient from 'webpack-worker/client'
 import throttle from 'webpack-worker/throttle.mostRecent'
 import Plotly from 'plotly.js/dist/plotly-basic.js'
 
+const layout = {
+  yaxis: {
+    ticksuffix: '%',
+    showticksuffix: 'last'
+  }
+}
+
 export default class WithWorkers extends Component {
   // we are just hard coding this range for simplicity
   state = {
@@ -26,7 +33,7 @@ export default class WithWorkers extends Component {
   renderGraph = filter => {
     this.setState({ filter })
     this.worker.topTenMovers(filter)
-      .then(data => Plotly.newPlot(this.element, [data]))
+      .then(data => Plotly.newPlot(this.element, data, layout))
       .catch(error => error.dropped || console.error(error))
   }
 

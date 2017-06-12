@@ -4,6 +4,13 @@ import topTenMovers from './worker/topTenMovers'
 import parseFile from './worker/parseFile'
 import Plotly from 'plotly.js/dist/plotly-basic.js'
 
+const layout = {
+  yaxis: {
+    ticksuffix: '%',
+    showticksuffix: 'last'
+  }
+}
+
 export default class WithoutWorkers extends Component {
   // we are just hard coding this range for simplicity
   state = {
@@ -24,7 +31,7 @@ export default class WithoutWorkers extends Component {
 
   renderGraph = filter => {
     this.setState({ filter })
-    Plotly.newPlot(this.element, [topTenMovers(this.data, filter)])
+    Plotly.newPlot(this.element, topTenMovers(this.data, filter), layout)
   }
 
   render = () => (
