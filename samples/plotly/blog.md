@@ -52,7 +52,7 @@ api(url => {
 )
 ```
 
-You'll notice that this module doesn't export anything. That's because WebWorkers run in an isolated thread - this module is the entry point for the WebWorker. `webpack-worker` handles the low level communication for us. We'll talk about how to use webpack to create a bundle for this a little bit later.
+You'll notice that this module doesn't export anything. That's because WebWorkers run in an isolated thread - this module is the entry point for the WebWorker. `webpack-worker` handles the low level communication for us. We'll talk about how to use webpack to create a bundle for our worker a little bit later.
 
 ## Consuming Our Worker
 
