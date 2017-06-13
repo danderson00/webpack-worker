@@ -152,7 +152,7 @@ module.exports = {
 }
 ```
 
-### Configuring a create-react-app Application
+### Configuring a `create-react-app` Application
 
 There are a few extra steps involved in configuring react applications created with `create-react-app`. Unfortunately, `create-react-app` does not support customising the webpack configuration, so we'll need to eject by running `npm run eject`. This leaves us with a `config` folder that contains webpack configuration.
 
