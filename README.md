@@ -177,9 +177,13 @@ Then, we need to include the bundle name in the the output filename:
   },
 ```
 
-`create-react-app` uses a [webpack plugin](https://github.com/jantimon/html-webpack-plugin) called `html-webpack-plugin` creates an `index.html` that loads all entry points when the page is rendered. We need to prevent the worker bundle from being loaded on page render as it's loaded when the worker is created.
+`create-react-app` uses a webpack plugin called [`html-webpack-plugin`](https://github.com/jantimon/html-webpack-plugin) 
+that generates an `index.html` that loads all entry points when the page is rendered. 
+We need to prevent the worker bundle from being loaded on page render as it's loaded 
+at a later point when the worker is created.
 
-Under the `plugins` node, you'll find an entry that looks like the following. Add an `excludeChunks` property that matches the name of the entry point:
+Under the `plugins` node, you'll find an entry that looks like the following. Add an 
+`excludeChunks` property that matches the name of the entry point:
 
 ```Javascript
     new HtmlWebpackPlugin({
