@@ -53,6 +53,9 @@ var process = client(worker, { query: 'my query' })
 
 Once the promise returned from the worker process resolves, the worker will terminate.
 
+`webpack-worker` handles the marshalling of `ArrayBuf` and other [transferrable objects](https://developer.mozilla.org/en-US/docs/Web/API/Transferable).
+This is particularly useful for passing the results of [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader) operations.
+
 ### API
 
 API workers, on the other hand, are intended to be a persistent process that
