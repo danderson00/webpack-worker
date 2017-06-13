@@ -3,7 +3,11 @@
 webpack-worker is a tiny library that greatly simplifies running CPU intensive 
 work on another thread in the browser.
 
-For a detailed walk-through of using `webpack-worker`, see the blog post [here](https://github.com/danderson00/webpack-worker/blob/master/samples/plotly/blog.md).
+For a detailed walk-through of using `webpack-worker`, see the blog post 
+[here](https://github.com/danderson00/webpack-worker/blob/master/samples/plotly/blog.md).
+
+A live example of a graph filtering system made with `webpack-worker` and [`Plotly.js`](https://plot.ly/javascript/) 
+can be found [here](https://danderson00.github.io/webpack-worker/)
 
 ## Installation
 
