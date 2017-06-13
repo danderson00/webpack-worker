@@ -80,6 +80,56 @@ client(worker, 123).then(api => {
 })
 ```
 
+## Throttling API Calls
+
+Applying throttling functions from other libraries such as [`lodash.throttle`](https://lodash.com/docs/4.16.6#throttle) 
+is as simple as applying the throttling function to client API functions:
+
+```Javascript
+var client = require('webpack-worker/client')
+var worker = new Worker('api.bundle.js')
+var throttle = require('lodash.throttle')
+
+client(worker).then(api => {
+  // ensure the bigCalculation API function is executed at most once every 100ms
+  return Object.assign(api, { bigCalculation: throttle(api.bigCalculation, 100) })
+})
+```
+
+### Throttling User Generated UI Feedback
+
+A built in throttling function is provided that provides effective throttling
+for events such as mouse move / drag.
+
+The API wraps a function that is expected to return promises. If multiple 
+invocations are received while the promise is still pending, only the most recent 
+is queued for execution, others are dropped.
+
+Dropped invocations are indicated by the promise associated with the invocation
+being rejected. To identify dropped invocations, the passed `Error` object has 
+a property attached named `dropped` that is set to `true`.
+
+Individual functions can be throttled:
+
+```Javascript
+var throttle = require('webpack-worker/throttle.mostRecent')
+
+module.exports = throttle(delay => Promise.delay(delay || 1000))
+```
+
+An additional helper function `applyTo` is attached to the exported function
+that applies the throttle to any function member of the supplied object. It
+can be used to easily wrap worker client API objects:
+
+```Javascript
+var client = require('webpack-worker/client')
+var throttle = require('webpack-worker/throttle.mostRecent')
+
+client(new Worker('api.bundle.js')).then(api => {
+  return throttle.applyTo(api)
+})
+```
+
 ## Configuring webpack
 
 Configuring webpack is as simple as adding an entry point to the webpack configuration:
