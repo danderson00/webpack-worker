@@ -1,12 +1,8 @@
-# Parallelizing Javascript Workloads - Building High Performance Graphs with Plotly and webpack-worker
-
-Recently, we've been playing around with plotting various graphs in a react application with Plotly. It became clear pretty quickly that working with large data sets on the main application thread is simply not an option. Dragging a date range slider to filter graphs is jarring, not the smooth experience we're after.
+Recently, we've been playing around with plotting various graphs in a react application with [Plotly.js](https://plot.ly/javascript/). It became clear pretty quickly that working with large data sets on the main application thread is simply not an option. Dragging a date range slider to filter graphs is jarring, not the smooth experience we're after.
 
 Enter WebWorkers. 
 
-WebWorkers allow offloading CPU intensive tasks to other threads and are [supported by](http://caniuse.com/#search=webworker) pretty all modern web browsers. However, they are a very low level mechanism, exposing only a simple message passing API for communication. The `webpack-worker` package provides us with a much simpler and cleaner abstraction for everyday use.
-
-The use case discussed here is purely to demonstrate the impact of using WebWorkers - `webpack-worker` can be used for executing any Javascript code within a WebWorker, not just calculating graph data.
+WebWorkers allow offloading CPU intensive tasks to other threads and are [supported by](http://caniuse.com/#search=webworker) pretty much all modern web browsers. However, they are a very low level mechanism, exposing only a simple message passing API for communication. The `webpack-worker` package provides us with a cleaner and more intuitive abstraction based on [promises](https://spring.io/understanding/javascript-promises).
 
 ## Setting the Scene
 
@@ -16,9 +12,11 @@ The data consists of a year of stock prices for 242 stocks in CSV format, one li
 
     20090916,AMZN,85.97,90.98,85.9,90.7,131142
 
-That's the date, stock symbol, opening, high, low, and closing prices, and... I dunno. We're going to duplicate the data so we effectively have 5 years worth of data. We're not here to analyze stocks, are we?
+That’s the date, stock symbol, opening, high, low, and closing prices, I'm not sure what the last column refers to. We’re going to duplicate the data so we effectively have 5 years worth of data. This destroys any integrity in the results, but we’re not here to analyze stocks!
 
 There is a bunch of work for the app to do to convert this style data into the format we need, particularly when working over many years worth of data. The details of the implementation aren't relevant to this post, but the complete sample is available in the [github repository](https://github.com/danderson00/webpack-worker/tree/master/samples/plotly).
+
+You can see a working example that compares using WebWorkers with running everything on the main UI thread [here](https://danderson00.github.io/webpack-worker/).
 
 ## Defining Our Worker Code
 
@@ -90,7 +88,7 @@ export default class Graph extends Component {
 
 Pretty simple stuff. You'll notice we kept graph rendering logic separate in the `renderGraph` function. We'll reuse this when we add a date filter. This ends up looking something like:
 
-![alt text](https://danderson00.github.io/webpack-worker/resources/graph.png "rendered graph")
+[![alt text](https://danderson00.github.io/webpack-worker/resources/graph.png "rendered graph")](https://danderson00.github.io/webpack-worker/resources/graph.png)
 
 ## Dynamically Filtering
 
@@ -128,9 +126,11 @@ export default class Graph extends Component {
 
 This ends up looking something like:
 
-![alt text](https://danderson00.github.io/webpack-worker/resources/graph%20with%20filter.png "rendered graph with date range slider")
+[![alt text](https://danderson00.github.io/webpack-worker/resources/graph%20with%20filter.png "rendered graph with date range slider")](https://danderson00.github.io/webpack-worker/resources/graph%20with%20filter.png)
 
-Things are starting to look pretty good! Now, as we drag the date slider, the graph updates. There's a problem, though. As we drag the slider, it queues up a filter for every move event onto our worker, which tirelessly attempts to fulfil all of our requests... long after we've finished dragging the slider.
+Things are starting to look pretty good! Now, as we drag the date slider, the graph updates. 
+
+There’s a problem, though. As we drag the slider, it queues up a filter operation for every mouse move event onto our worker, which tirelessly attempts to fulfill all of our requests... long after we’ve finished dragging the slider.
 
 ## Throttling
 
@@ -160,7 +160,8 @@ When requests are dropped, the returned promise is rejected, so we need to handl
     this.setState({ filter })
     this.worker.topTenMovers(filter)
       .then(data => Plotly.newPlot(this.element, [data]))
-      // ignore any dropped packets. we need to handle any errors coming out of the worker here
+      // ignore any dropped packets
+      // we need to handle any errors coming out of the worker here
       .catch(error => error.dropped || console.error(error))
   }
 ```
@@ -185,6 +186,8 @@ If your app was created with `create-react-app`, there are a couple of additiona
 
 ## Wrapping Up
 
-You can see a working example of what we've discussed here contrasted with running everything on the main UI thread [here](https://danderson00.github.io/webpack-worker/). It's worth noting that `webpack-worker` will work with other bundling systems like browserify.
+You can see a working example of what we've discussed here contrasted with running everything on the main UI thread [here](https://danderson00.github.io/webpack-worker/). 
+
+The use case discussed here is purely to demonstrate the impact of using WebWorkers - `webpack-worker` can be used for executing any Javascript code within a WebWorker, not just calculating graph data. It's also worth noting that `webpack-worker` will work with other bundling systems like `browserify`.
 
 The full source to this sample is available in the `webpack-worker` repository [here](https://github.com/danderson00/webpack-worker/samples/plotly).
