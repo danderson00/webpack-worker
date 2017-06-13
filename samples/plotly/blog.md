@@ -1,8 +1,8 @@
 Recently, we've been playing around with plotting various graphs in a react application with [Plotly.js](https://plot.ly/javascript/). It became clear pretty quickly that working with large data sets on the main application thread is simply not an option. Dragging a date range slider to filter graphs is jarring, not the smooth experience we're after.
 
-Enter WebWorkers. 
+Enter [WebWorkers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers). 
 
-WebWorkers allow offloading CPU intensive tasks to other threads and are [supported by](http://caniuse.com/#search=webworker) pretty much all modern web browsers. However, they are a very low level mechanism, exposing only a simple message passing API for communication. The `webpack-worker` package provides us with a cleaner and more intuitive abstraction based on [promises](https://spring.io/understanding/javascript-promises).
+WebWorkers allow offloading CPU intensive tasks to other threads and are [supported by](http://caniuse.com/#search=webworker) pretty much all modern web browsers. However, they are a very low level mechanism, exposing only a simple message passing API for communication. The [`webpack-worker`](https://github.com/danderson00/webpack-worker) package provides us with a cleaner and more intuitive abstraction based on [promises](https://spring.io/understanding/javascript-promises).
 
 ## Setting the Scene
 
