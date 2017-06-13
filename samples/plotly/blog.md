@@ -16,7 +16,7 @@ The data consists of a year of stock prices for 242 stocks in CSV format, one li
 
 That’s the date, stock symbol, opening, high, low, and closing prices, I'm not sure what the last column refers to. We’re going to duplicate the data so we effectively have 5 years worth of data. This destroys any integrity in the results, but we’re not here to analyze stocks!
 
-There is a bunch of work for the app to do to convert this style data into the format we need, particularly when working over many years worth of data. The details of the implementation aren't relevant to this post, but the complete sample is available in the [github repository](https://github.com/danderson00/webpack-worker/tree/master/samples/plotly).
+There is a considerable amount of work for the app to do to convert this style data into the format we need, particularly when working over many years worth of data. The details of the implementation aren't relevant to this post, but the complete sample is available in the [github repository](https://github.com/danderson00/webpack-worker/tree/master/samples/plotly).
 
 You can see a working example that compares using WebWorkers with running everything on the main UI thread [here](https://danderson00.github.io/webpack-worker/).
 
@@ -142,13 +142,11 @@ Fortunately, `webpack-worker` gives us a simple way to throttle our requests to 
 import throttle from 'webpack-worker/throttle.mostRecent'
 // ...
   componentDidMount = () => {
-    createClient(
-      new Worker('/static/js/worker.bundle.js'), 
-      '/sp500hst.txt'
-    ).then(client => {
-      this.worker = throttle.applyTo(client) // apply throttling to API requests
-      this.renderGraph(this.state.filter)
-    })
+    createClient(new Worker('/static/js/worker.bundle.js'), '/sp500hst.txt')
+      .then(client => {
+        this.worker = throttle.applyTo(client) // apply throttling to API requests
+        this.renderGraph(this.state.filter)
+      })
   }
 // ...
 ```
