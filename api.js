@@ -1,11 +1,15 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
-var common = require('./worker.common')
+var commonFactory = require('./worker.common')
+var stub = require('./stub')
 
-module.exports = function(worker) {
+module.exports = function(worker, host) {
+  host = host || self
+
   var operations
 
-  onmessage = function(e) {
+  host.onmessage = function(e) {
+    var common = commonFactory(host || self)
     var emit = common.emit(e.data.id)
     var emitError = common.emitError(emit)
     var userEmit = common.userEmit(emit)
@@ -20,7 +24,7 @@ module.exports = function(worker) {
             })
             .catch(function(error) {
               emitError(error)
-              close()
+              host.close()
             })
           break;
 
@@ -38,7 +42,11 @@ module.exports = function(worker) {
       }
     } catch(error) {
       emitError(error)
-      close()
+      host.close()
     }
   }
+}
+
+module.exports.stub = function(worker) {
+  return stub(worker, module.exports)
 }

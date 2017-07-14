@@ -38,7 +38,6 @@ module.exports = function(worker, param) {
 
   function execute(id, payload) {
     return attachSubscribeFunction(id, new Promise(function(resolve, reject) {
-      worker.postMessage(Object.assign({ id: id }, payload), extractArrayBuffers(payload.param))
       operations[id] = {
         listeners: [],
         messageHandler: function(response) {
@@ -55,6 +54,7 @@ module.exports = function(worker, param) {
           }
         }
       }
+      worker.postMessage(Object.assign({ id: id }, payload), extractArrayBuffers(payload.param))
     }))
   }
 
