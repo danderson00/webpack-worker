@@ -1,1 +1,1 @@
-require('../../process')(value => value * 2)
+require('../../src/process')(value => value * 2)

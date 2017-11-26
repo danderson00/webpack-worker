@@ -1,4 +1,4 @@
-var throttle = require('../throttle.mostRecent')
+var throttle = require('../src/throttle.mostRecent')
 
 test("queues executions", done => {
   let o = generateOperation()

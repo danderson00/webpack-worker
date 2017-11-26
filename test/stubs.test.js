@@ -1,6 +1,6 @@
-var client = require('../client')
-var process = require('../process')
-var api = require('../api')
+var client = require('../src/client')
+var process = require('../src/process')
+var api = require('../src/api')
 var stubs = require('./workers/stubs')
 
 // these things really shouldn't exist

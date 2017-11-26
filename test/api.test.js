@@ -1,5 +1,5 @@
 var Worker = require('tiny-worker')
-var client = require('../client')
+var client = require('../src/client')
 var setup = require('./setup')
 var path = require('path')
 var api

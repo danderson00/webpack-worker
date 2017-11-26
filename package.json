@@ -2,6 +2,7 @@
   "name": "webpack-worker",
   "version": "0.0.18",
   "description": "Simple request/response and event emit style web workers",
+  "main": "src/pool.js",
   "scripts": {
     "test": "jest"
   },
