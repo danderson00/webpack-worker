@@ -2,7 +2,7 @@ module.exports = function (self) {
   var common = { 
     emit: function(id) {
       return function(data) {
-        self.postMessage(Object.assign({ id: id }, data))
+        self.postMessage(Object.assign({ id: id }, data), '*')
       }
     },
     wrapError: function(error) {
